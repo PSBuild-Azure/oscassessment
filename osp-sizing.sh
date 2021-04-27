@@ -85,7 +85,9 @@ do
 	nice -n 19 openstack hypervisor show $i -f json >> $output
 	sleep 2
 done
+echo "" >> $output
 outlabel "\`\`\`"
+echo "" >> $output
 
 vms=$(nice -n 19 openstack server list --all-projects -f value | awk '{print $2}')
 sleep 2
