@@ -4,45 +4,43 @@
 
 ### For Openstack
 
-Hacer sesión en Openstack con rol de admin sobre el tenant admin, típicamente con :
+Login to Openstack, for example reading the correct RC file for admin project.
 
 ```
 $ source admin-rc.sh 
 ```
 
-Este comando puede poner carga media a las controladoras de Openstack, no afecta servicios
+Then execute the Openstack assessment script (the script includes read only commands):
 ```
-time nice -n 19 ./osp-sizing.sh
+time  ./osp-sizing.sh
 ```
 
 
 ### For Openshift
 
-Hacer login en Openshift, se puede dar "copy login command" en el portal o hacer:
+Login to Openshift/Origin:
 
 ```
 oc login
 ```
 
-Se requieren permisos de cluster-admin
+Cluster admin access required, read only commands, this script will not perform any modifications.
 
 
-Este comando genera una carga pequeña en las controladoras de Openshift, no afecta servicios
+Execute the Openshift assessment:
 ```
 time ./ocp-assessment.sh
 ```
 
-Este comando puede poner carga media a las controladoras de Openshift, no afecta servicios:
+Then perform an Openshift cluster-dump:
 ```
 oc cluster-info dump > cluster.dump
 ```
 
-## Resultados
+## Results
 
-Se generan tres archivos, se pueden comprimir considerablemente ya que sólo son salidas de texto.
-* output="rhosp-assessment.out"
-* output="rs-ocp-assessment.out"
+Three report files will be created:
+* output="openstack-assessment.md"
+* output="rs-ocp-assessment.md"
 * y la salida de cluster-info: cluster.dump
 
-## Autor
-Fabián Salamanca <fabian.salamanca@rackspace.com>
