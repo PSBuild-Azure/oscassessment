@@ -1,1 +1,4 @@
 *.out
+!README.md
+!INSTALL.md
+*.md

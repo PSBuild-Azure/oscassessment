@@ -6,7 +6,7 @@
 # ******************************************************
 
 
-output="rhosp-assessment.out"
+output="openstack-assessment.md"
 echo > $output
 
 function spacedel {
@@ -49,11 +49,11 @@ nice -n 19 openstack volume list --all-projects >> $output
 sleep 2
 outlabel "\`\`\`"
 
-outlabel "## Redes (Neutron)"
+outlabel "## Networks (Neutron)"
 outlabel "\`\`\`"
 for i in $tenants
 do
-	outlabel "### Redes en proyecto: $i"
+	outlabel "### Networks in project: $i"
 	nice -n 19 openstack network list --project $i >> $output
 	sleep 2
 done
@@ -92,7 +92,7 @@ echo "" >> $output
 vms=$(nice -n 19 openstack server list --all-projects -f value | awk '{print $2}')
 sleep 2
 
-outlabel "## Detalle de VMs"
+outlabel "## Cloud Instances Details"
 outlabel "\`\`\`"
 for i in $vms
 do
