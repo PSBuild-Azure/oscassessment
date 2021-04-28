@@ -6,7 +6,7 @@
 # ******************************************************
 
 
-output="rs-ocp-assessment.out"
+output="rs-ocp-assessment.md"
 echo > $output
 
 function spacedel {
