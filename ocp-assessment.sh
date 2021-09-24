@@ -41,7 +41,7 @@ outlabel "\`\`\` "
 spacedel
 outlabel "## OCP get nodes"
 spacedel
-outlabel "### NODOS"
+outlabel "### NODES"
 spacedel
 oc get nodes -o wide >> $output
 spacedel
