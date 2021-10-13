@@ -42,5 +42,5 @@ oc cluster-info dump > cluster.dump
 Three report files will be created:
 * output="openstack-assessment.md"
 * output="rs-ocp-assessment.md"
-* y la salida de cluster-info: cluster.dump
+* And the output of the cluster-info command: cluster.dump
 
