@@ -17,10 +17,36 @@ function outlabel {
 	echo $1 >> $output
 }
 
+function desnodes {
+    nodes=$(oc get nodes -o jsonpath="{.items[*].metadata.name}")
+    spacedel
+    outlabel "\`\`\`"
+    for i in $nodes
+    do
+        echo >> $output
+        echo "**Node ${i}**" >> $output
+        echo >> $output
+        oc describe node $i >> $output
+    done        
+    outlabel "\`\`\`"
+}
+
+function pvcs {
+    namespaces=$(oc get ns -o jsonpath="{.items[*].metadata.name}")
+    spacedel
+    outlabel "\`\`\`"
+    for i in $namespaces
+    do
+        echo "**Namespace ${i}**" >> $output
+        oc get pvc -n $i >> $output
+    done
+    outlabel "\`\`\`"
+}
+
 function crashedpods {
 	crashed=$(oc get pods -n $1 | egrep -i "(loop|error|pending|waiting)")
 	spacedel
-	outlabel "*Pods con fallas on $1*"
+	outlabel "*Failed pods in namespace: $1*"
 	spacedel
 	outlabel "\`\`\`"
 	for i in $crashed
@@ -31,7 +57,7 @@ function crashedpods {
 	outlabel "\`\`\`"
 }
 
-echo "Iniciando..."
+echo "Starting..."
 
 outlabel "# OPENSHIFT ASSESSMENT - RACKSPACE"
 spacedel
@@ -43,8 +69,12 @@ outlabel "## OCP get nodes"
 spacedel
 outlabel "### NODES"
 spacedel
+outlabel "\`\`\` "
 oc get nodes -o wide >> $output
+outlabel "\`\`\` "
 spacedel
+
+desnodes
 
 outlabel "### Kubernetes config view"
 spacedel
@@ -67,10 +97,24 @@ oc get dc  --all-namespaces >> $output
 outlabel "\`\`\`"
 spacedel
 
-outlabel "### Kubernetes services"
+outlabel "### Kubernetes Services"
 spacedel
 outlabel "\`\`\`"
 oc get service -o wide --all-namespaces >> $output
+outlabel "\`\`\`"
+spacedel
+
+outlabel "### Openshift Routes"
+spacedel
+outlabel "\`\`\`"
+oc get routes -o wide --all-namespaces >> $output
+outlabel "\`\`\`"
+spacedel
+
+outlabel "### Persistent Volumes"
+spacedel
+outlabel "\`\`\`"
+oc get pv -o wide >> $output
 outlabel "\`\`\`"
 spacedel
 
@@ -81,6 +125,13 @@ oc get is --all-namespaces >> $output
 outlabel "\`\`\`"
 spacedel
 
+outlabel "### Openshift Build Templates (S2I)"
+spacedel
+outlabel "\`\`\`"
+oc new-app -L >> $output
+outlabel "\`\`\`"
+spacedel
+
 outlabel "### Openshift BuildConfigs"
 spacedel
 outlabel "\`\`\`"
@@ -88,9 +139,9 @@ oc get bc --all-namespaces >> $output
 outlabel "\`\`\`"
 spacedel
 
-outlabel "### Buscando fallas en pods"
+outlabel "### Failed Pods per NS"
 spacedel
-projects=$(oc get namespaces | awk '/NAME/ {next;} {print $1}')
+projects=$(oc get ns -o jsonpath="{.items[*].metadata.name}")
 for i in $projects
 do
 	crashedpods $i	
